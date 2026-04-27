@@ -1,5 +1,77 @@
-<h2>Welcome to Dashboard</h2>
+<!-- templates/dashboard.html -->
 
-<p>Hello, {{ request.user.username }}</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
 
-<a href="{% url 'logout' %}">Logout</a>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Welcome, {{ request.user.username }}</h2>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+    </div>
+    {% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Welcome {{ user.username }} 👋</h2>
+
+<h3>Available Jobs</h3>
+
+{% for job in jobs %}
+<div class="job-card">
+    <div class="job-title">{{ job.title }}</div>
+    <p>{{ job.description }}</p>
+    <a href="/apply/{{ job.id }}/">
+        <button class="btn">Apply Now</button>
+    </a>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+    <!-- Recommended Jobs -->
+    <h3 class="mb-3">🤖 Recommended Jobs</h3>
+
+    {% if job_list %}
+        {% for job, score in job_list %}
+            <div class="card mb-3 shadow-sm p-3">
+                <h4>{{ job.title }}</h4>
+                <p><b>Company:</b> {{ job.company }}</p>
+                <p><b>Skills Required:</b> {{ job.skills_required }}</p>
+                <p><b>Match Score:</b> {{ score }}</p>
+
+                <a href="{% url 'apply_job' job.id %}" class="btn btn-primary">Apply</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No jobs available.</p>
+    {% endif %}
+
+    <!-- Applied Jobs -->
+    <h3 class="mt-5 mb-3">📌 Applied Jobs</h3>
+
+    {% if applied_jobs %}
+        {% for app in applied_jobs %}
+            <div class="card mb-3 border-success shadow-sm p-3">
+                <h4>{{ app.job.title }}</h4>
+                <p><b>Company:</b> {{ app.job.company }}</p>
+                <p><b>Applied on:</b> {{ app.applied_at }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You have not applied to any jobs yet.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

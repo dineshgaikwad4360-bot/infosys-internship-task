@@ -1,17 +1,23 @@
-# Virtual Environment
-venv/
+# .gitignore
 
-# Python cache files
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Database
+# Virtual Environment
+venv/
+env/
+
+# Django
 db.sqlite3
+*.log
 
 # Environment variables
 .env
 
-# VS Code settings
+# VS Code
 .vscode/
 
 # OS files
